@@ -21,7 +21,7 @@ unsigned long tempoDiff = 0;		   // differenza tra tempo e tempoPrec
 float secondi = 0.0f;				   // variabile generica che contiene secondi (float)
 float watt = 0.0f;                     // variabile generica che contiene una potenza (float)
 
-unsigned long arrayValues[10];         // array per gli ultime 10 ricezioni ricevute via radio (diffContatoreA)
+unsigned long arrayValuesA[10];         // array per gli ultime 10 ricezioni ricevute via radio (diffContatoreA)
 unsigned long arrayValuesB[10];
 unsigned long arrayTiming[10];
 unsigned long arrayTimingB[10];
@@ -156,21 +156,21 @@ void printWatt(int cursorCol, int CursorRow) {
   }
 }
 
-void addForDiagramB(unsigned long value, unsigned long time) {
+void addForDiagramA(unsigned long value, unsigned long time) {
   // spostamento array
   for (byte i = 0; i < 10; i++) {
-    arrayValues[i] = arrayValues[i + 1];
+    arrayValuesA[i] = arrayValuesA[i + 1];
     arrayTiming[i] = arrayTiming[i + 1];
   }
   // aggiunta dei valori
-  arrayValues[9] = value;
+  arrayValuesA[9] = value;
   arrayTiming[9] = time;
 
   // calcolo dell'integrale
   // tra l'ultimo e il primo valore
   sum = 0;
   for (byte i = 0; i < 10; i++) {
-    sum += arrayValues[i];
+    sum += arrayValuesA[i];
   }
 
   // differenza del tempo tra l'ultimo e il primo
@@ -181,51 +181,11 @@ void addForDiagramB(unsigned long value, unsigned long time) {
   // calcolo watt
   watt = sum / secondi * 3600;
 
-
-  lcd.setCursor(10, 1);
-  lcd.print("    ");
-
   printWatt(10, 1);
-
-  lcd.setCursor(0, 1);
-
-  for (byte i = 0; i < 10; i++) {
-    switch (arrayValues[i]) {
-      case 0:
-        lcd.print(" ");
-        break;
-      case 1:
-        lcd.write(byte(0));
-        break;
-      case 2:
-        lcd.write(byte(1));
-        break;
-      case 3:
-        lcd.write(byte(2));
-        break;
-      case 4:
-        lcd.write(byte(3));
-        break;
-      case 5:
-        lcd.write(byte(4));
-        break;
-      case 6:
-        lcd.write(byte(5));
-        break;
-      case 7:
-        lcd.write(byte(6));
-        break;
-      default:
-        lcd.write(byte(7));
-        break;
-    }
-  }
-
 
 }
 
-void addForDiagramA(unsigned long value, unsigned long time) {
-
+void addForDiagramB(unsigned long value, unsigned long time) {
   // spostamento array
   for (byte i = 0; i < 10; i++) {
     arrayValuesB[i] = arrayValuesB[i + 1];
@@ -250,45 +210,5 @@ void addForDiagramA(unsigned long value, unsigned long time) {
   // calcolo watt
   watt = sum / secondi * 3600;
 
-
-  lcd.setCursor(10, 0);
-  lcd.print("    ");
-
   printWatt(10, 0);
-
-  lcd.setCursor(0, 0);
-
-  for (byte i = 0; i < 10; i++) {
-    switch (arrayValuesB[i]) {
-      case 0:
-        lcd.print(" ");
-        break;
-      case 1:
-        lcd.write(byte(0));
-        break;
-      case 2:
-        lcd.write(byte(1));
-        break;
-      case 3:
-        lcd.write(byte(2));
-        break;
-      case 4:
-        lcd.write(byte(3));
-        break;
-      case 5:
-        lcd.write(byte(4));
-        break;
-      case 6:
-        lcd.write(byte(5));
-        break;
-      case 7:
-        lcd.write(byte(6));
-        break;
-      default:
-        lcd.write(byte(7));
-        break;
-    }
-  }
-
-
 }
